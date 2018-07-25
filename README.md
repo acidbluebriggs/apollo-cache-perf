@@ -22,8 +22,7 @@ each new request. It degrades consistently as the cache grows. It seems
 that there is an extremely large amount of "subscriber notifications" 
 that occur during the cache writes. You can seem more information at:
 
-[https://stackoverflow.com/questions/50626652/apollo-inmemorycache-performance-strategies-for-large-data-set-react]
-(https://stackoverflow.com/questions/50626652/apollo-inmemorycache-performance-strategies-for-large-data-set-react)
+[StackOverflow](https://stackoverflow.com/questions/50626652/apollo-inmemorycache-performance-strategies-for-large-data-set-react)
 
 
 *Note: Even though the response shows a relay style cursor, the result
