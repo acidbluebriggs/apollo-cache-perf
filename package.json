@@ -1,0 +1,31 @@
+{
+  "name": "cache-test-example",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "apollo-cache-inmemory": "^1.3.0-beta.5",
+    "apollo-client": "^2.3.5",
+    "apollo-link-error": "^1.1.0",
+    "apollo-link-http": "^1.5.4",
+    "apollo-link-state": "^0.4.1",
+    "graphql": "^0.13.2",
+    "graphql-client": "^2.0.1",
+    "graphql-tag": "^2.9.2",
+    "prop-types": "^15.6.2",
+    "react": "^16.4.1",
+    "react-apollo": "^2.1.9",
+    "react-dom": "^16.4.1",
+    "react-scripts": "1.1.4"
+  },
+  "scripts": {
+    "demo": "npm-run-all --parallel mock-server start",
+    "start": "node tools/scripts/start.js",
+    "mock-server": "npx json-server --port 2999 --read-only  mock-json-server/mock-graphql-response.json",
+    "build": "node tools/scripts/build.js",
+    "test": "node tools/scripts/test.js --env=jsdom"
+  },
+  "proxy": "http://localhost:2999",
+  "devDependencies": {
+    "json-server": "^0.14.0"
+  }
+}

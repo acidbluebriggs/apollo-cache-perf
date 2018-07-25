@@ -1,0 +1,401 @@
+query CursorPlansQuery($count: Int! $after: String $filter: WorkAreaFilter) {
+    repository {
+        workArea(first: $count after: $after filters: $filter) {
+            ...WorkaAreaConnectionInfo
+            edges {
+                cursor
+                node {
+                    ...FullWorkspacePlanVisit
+                }
+            }
+        }
+    }
+}
+
+fragment WorkaAreaConnectionInfo on WorkAreaConnection {
+    pageInfo {
+        endCursor
+        hasNextPage
+        hasPreviousPage
+        startCursor
+    }
+    meta {
+        barriers {
+            barriers {
+                id
+                text
+            }
+            uniqueBarriers
+        }
+        progression {
+            notSet
+            onTime
+            atRisk
+            highRisk
+            total
+        }
+        losReview {
+            decisionDue
+            overCurrentOE
+            noTotalLengthOfStay
+            overForecastOE
+            pastPlannedDischarge
+        }
+        discharges {
+            notSet
+            anticipated
+            pending
+            ready
+            recent
+        }
+    }
+}
+
+fragment FullWorkspacePlanVisit on Workspace {
+    department {
+        ...FullDepartment
+    }
+    visit {
+        ...FullVisit
+        __typename
+    }
+    bed {
+        ...FullBed
+        __typename
+    }
+    plan {
+        ...FullPlan
+        __typename
+    }
+    __typename
+}
+
+fragment FullDepartment on Department {
+    exchangeName
+    name
+    type
+    includedInLosCalculation
+}
+
+fragment FullVisit on Visit {
+    id
+    visitNumber
+    homeBedExchangeName
+    bedConflict {
+        created
+        createdBy {
+            ...FullAuditUser
+            __typename
+        }
+        exchangeName
+        __typename
+    }
+    admissionType
+    admissionTime
+    patientProblem
+    admittingComplaint
+    bedRequestStatus
+    visitStatus
+    anticipatedDischargeTime
+    targetDischargeTime
+    decisionTime
+    decisionTimeEditable
+    decisionTimeUseMidnight
+    tlos
+    currentDayOfStay
+    readmissionRisk
+    readmissionRiskVerifiedBy {
+        ...FullAuditUser
+        __typename
+    }
+    readmissionRiskUpdatedWhen
+    readmission
+    readmissionUpdatedWhen
+    readmissionVerifiedBy {
+        ...FullAuditUser
+        __typename
+    }
+    bundledPayment
+    bundledPaymentUpdatedWhen
+    bundledPaymentVerifiedBy {
+        ...FullAuditUser
+        __typename
+    }
+    patientAlerts {
+        alertType
+        value
+        __typename
+    }
+    insurancePlans {
+        planName
+        cms
+        bundledPayment
+        priority
+        __typename
+    }
+    drgAttributes {
+        ...FullDrgAttributes
+        __typename
+    }
+    drgUpdatedBy {
+        ...FullAuditUser
+        __typename
+    }
+    drgUpdatedWhen
+    patient {
+        ...FullPatient
+        __typename
+    }
+    workingDischargeDisposition {
+        ...CodeValue
+        __typename
+    }
+    dischargeVendor
+    admittingPhysician {
+        ...FullPersonnel
+        __typename
+    }
+    attendingPhysician {
+        ...FullPersonnel
+        __typename
+    }
+    consultingPhysicians {
+        ...FullPersonnel
+        __typename
+    }
+    __typename
+}
+
+fragment FullBed on Bed {
+    exchangeName
+    name
+    assigned
+    status
+    visitId
+    dischargedVisitId
+    conflictingVisitIds
+    providers {
+        ...FullPersonnel
+        __typename
+    }
+    __typename
+}
+
+fragment FullPlan on Plan {
+    id
+    appliedTemplates {
+        id
+        name
+        description
+        documentURL
+        __typename
+    }
+    careTeamMembers {
+        ...FullCareTeamMember
+        __typename
+    }
+    progressionIndicator
+    meta {
+        ...FullPlanMeta
+        __typename
+    }
+    milestones {
+        ...FullMilestone
+        __typename
+    }
+    barriers {
+        ...FullBarrier
+        __typename
+    }
+    actions {
+        ...FullPlanAction
+        __typename
+    }
+    notes {
+        ...FullPlanNote
+        __typename
+    }
+    __typename
+}
+
+fragment FullAuditUser on AuditUser {
+    userName
+    firstName
+    lastName
+    __typename
+}
+
+fragment FullDrgAttributes on DrgAttributes {
+    code
+    title
+    level
+    targetLos
+    __typename
+}
+
+fragment FullPatient on Patient {
+    id
+    mrn
+    age
+    gender
+    lastName
+    middleInitial
+    firstName
+    __typename
+}
+
+fragment CodeValue on CodeTablePair {
+    code
+    value
+    __typename
+}
+
+fragment FullPersonnel on PersonnelRole {
+    id
+    firstName
+    lastName
+    primary
+    role {
+        ...CodeValue
+        __typename
+    }
+    __typename
+}
+
+fragment FullCareTeamMember on CareTeamMember {
+    id
+    name
+    primary
+    role {
+        ...CodeValue
+        __typename
+    }
+    __typename
+}
+
+fragment FullPlanMeta on PlanMeta {
+    hasScratchpadNotes
+    milestoneMeta {
+        onTime
+        overdue
+        completed
+        __typename
+    }
+    lengthOfStayMeta {
+        forecast
+        cappedForecast
+        __typename
+    }
+    actualOE
+    __typename
+}
+
+fragment FullMilestone on Milestone {
+    id
+    name
+    description
+    track
+    dueDate
+    completedDate
+    status
+    planTemplateName
+    actions {
+        ...FullMilestoneAction
+        __typename
+    }
+    __typename
+}
+
+fragment FullBarrier on Barrier {
+    id
+    name
+    description
+    status
+    pinned
+    ...CreatedUpdated
+    category {
+        code
+        value
+        __typename
+    }
+    escalation {
+        ...Created
+        __typename
+    }
+    owner
+    ownerRole {
+        code
+        value
+        __typename
+    }
+    notes {
+        ...FullBarrierNote
+        __typename
+    }
+    __typename
+}
+
+fragment FullPlanAction on PlanAction {
+    id
+    text
+    status
+    pinned
+    ...CreatedUpdated
+    __typename
+}
+
+fragment FullPlanNote on PlanNote {
+    id
+    text
+    ...CreatedUpdated
+    pinned
+    __typename
+}
+
+fragment CreatedUpdated on Auditable {
+    ...Created
+    ...Updated
+    __typename
+}
+
+fragment FullMilestoneAction on MilestoneAction {
+    id
+    text
+    status
+    pinned
+    ...CreatedUpdated
+    milestoneTemplateName
+    __typename
+}
+
+fragment Created on Auditable {
+    auditMeta {
+        created
+        createdBy {
+            ...FullAuditUser
+            __typename
+        }
+        __typename
+    }
+    __typename
+}
+
+fragment FullBarrierNote on BarrierNote {
+    id
+    text
+    ...CreatedUpdated
+    pinned
+    __typename
+}
+
+fragment Updated on Auditable {
+    auditMeta {
+        updated
+        updatedBy {
+            ...FullAuditUser
+            __typename
+        }
+        __typename
+    }
+    __typename
+}
