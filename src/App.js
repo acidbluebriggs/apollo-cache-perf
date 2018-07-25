@@ -5,8 +5,8 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-          <h1>Cache Example</h1>
-        <Page /> {/* This does nothing in this demo */}
+        <h1>Cache Example</h1>
+        <Page />
       </div>
     );
   }
